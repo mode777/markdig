@@ -37,6 +37,14 @@ namespace Markdig
             return writer.ToString();
         }
 
+        public static string ToLatex(string markdown, MarkdownPipeline pipeline = null)
+        {
+            if (markdown == null) throw new ArgumentNullException(nameof(markdown));
+            var writer = new StringWriter();
+            ToLatex(markdown, writer, pipeline);
+            return writer.ToString();
+        }
+
         /// <summary>
         /// Converts a Markdown string to HTML and output to the specified writer.
         /// </summary>
@@ -62,6 +70,25 @@ namespace Markdig
 
             return document;
         }
+
+        public static MarkdownDocument ToLatex(string markdown, TextWriter writer, MarkdownPipeline pipeline = null)
+        {
+            if (markdown == null) throw new ArgumentNullException(nameof(markdown));
+            if (writer == null) throw new ArgumentNullException(nameof(writer));
+            pipeline = pipeline ?? new MarkdownPipelineBuilder().Build();
+            pipeline = CheckForSelfPipeline(pipeline, markdown);
+
+            // We override the renderer with our own writer
+            var renderer = new LatexRenderer(writer);
+            pipeline.Setup(renderer);
+
+            var document = Parse(markdown, pipeline);
+            renderer.Render(document);
+            writer.Flush();
+
+            return document;
+        }
+
 
         /// <summary>
         /// Converts a Markdown string using a custom <see cref="IMarkdownRenderer"/>.
