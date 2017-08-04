@@ -15,12 +15,19 @@ namespace Markdig.Renderers.Latex.Inlines
         /// Gets or sets a value indicating whether to always add rel="nofollow" for links or not.
         /// </summary>
         public bool AutoRelNoFollow { get; set; }
+        public bool IsCitation { get; set; }
 
         protected override void Write(LatexRenderer renderer, LinkInline link)
         {
+            if (link.Url.StartsWith("c:"))
+            {
+                IsCitation = true;
+                link.Url = link.Url.Substring(2);
+            }
+
             if (renderer.EnableLatexForInline)
             {
-                renderer.Write(link.IsImage ? @"\cite[" : @"\cite[");
+                renderer.Write(IsCitation ? @"\cite[" : @"\ref");
                 renderer.WriteChildren(link);
                 //renderer.WriteEscapeUrl(link.GetDynamicUrl != null ? link.GetDynamicUrl() ?? link.Url : link.Url);
                 //renderer.Write("\"");
@@ -64,12 +71,13 @@ namespace Markdig.Renderers.Latex.Inlines
                     {
                         renderer.Write(" rel=\"nofollow\"");
                     }
-                    renderer.Write(">");
+                    renderer.Write(IsCitation ? "]{" : "{");
                 }
-                renderer.WriteChildren(link);
+                
+                renderer.Write(link.Url);
                 if (renderer.EnableLatexForInline)
                 {
-                    renderer.Write("</a>");
+                    renderer.Write("}");
                 }
             }
         }

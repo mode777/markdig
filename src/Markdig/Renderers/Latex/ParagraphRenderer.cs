@@ -19,7 +19,7 @@ namespace Markdig.Renderers.Latex
                 {
                     renderer.EnsureLine();
                 }
-                renderer.Write("\n")/*.WriteAttributes(obj).Write(">")*/;
+                //renderer.Write("\n")/*.WriteAttributes(obj).Write(">")*/;
             }
             renderer.WriteLeafInline(obj);
             if (!renderer.ImplicitParagraph)

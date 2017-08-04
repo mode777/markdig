@@ -15,7 +15,7 @@ namespace Markdig.Renderers.Latex.Inlines
         {
             if (renderer.EnableLatexForInline)
             {
-                renderer.Write("\verb|")/*.WriteAttributes(obj).Write(">")*/;
+                renderer.Write("\\verb|")/*.WriteAttributes(obj).Write(">")*/;
             }
             renderer.WriteEscape(obj.Content);
             if (renderer.EnableLatexForInline)

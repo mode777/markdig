@@ -56,8 +56,7 @@ namespace Markdig.Renderers.Latex.Inlines
         {
             if (obj.DelimiterChar == '*' || obj.DelimiterChar == '_')
             {
-                return "textbf";
-                //return obj.IsDouble ? "" : "em";
+                return obj.IsDouble ? "textbf" : "textit";
             }
             return null;
         }

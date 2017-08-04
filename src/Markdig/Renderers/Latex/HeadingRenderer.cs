@@ -28,7 +28,7 @@ namespace Markdig.Renderers.Latex
 
             renderer.Write(@"\").Write(headingText)/*.WriteAttributes(obj)*/.Write("{");
             renderer.WriteLeafInline(obj);
-            renderer.Write("}")/*.Write(headingText).WriteLine(">")*/;
+            renderer.Write("}\n")/*.Write(headingText).WriteLine(">")*/;
         }
     }
 }

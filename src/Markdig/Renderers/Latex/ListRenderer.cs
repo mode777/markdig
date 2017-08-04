@@ -43,13 +43,13 @@ namespace Markdig.Renderers.Latex
                 renderer.ImplicitParagraph = !listBlock.IsLoose;
 
                 //renderer.EnsureLine();
-                renderer.Write(@"\item ")/*.WriteAttributes(listItem).Write("]")*/;
+                renderer.Write(@"    \item ")/*.WriteAttributes(listItem).Write("]")*/;
                 renderer.WriteChildren(listItem);
                 renderer.WriteLine();
 
                 renderer.ImplicitParagraph = previousImplicit;
             }
-            renderer.WriteLine(listBlock.IsOrdered ? "\\end{enumerate}\n" : "\\end{itemize}\n");
+            renderer.WriteLine(listBlock.IsOrdered ? "\\end{enumerate}" : "\\end{itemize}");
         }
     }
 }
