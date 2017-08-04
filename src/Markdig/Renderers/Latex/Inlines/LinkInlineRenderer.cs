@@ -2,6 +2,7 @@
 // This file is licensed under the BSD-Clause 2 license. 
 // See the license.txt file in the project root for more information.
 using Markdig.Syntax.Inlines;
+using System.IO;
 
 namespace Markdig.Renderers.Latex.Inlines
 {
@@ -15,71 +16,54 @@ namespace Markdig.Renderers.Latex.Inlines
         /// Gets or sets a value indicating whether to always add rel="nofollow" for links or not.
         /// </summary>
         public bool AutoRelNoFollow { get; set; }
-        public bool IsCitation { get; set; }
+        //public bool IsCitation { get; set; }
 
         protected override void Write(LatexRenderer renderer, LinkInline link)
         {
-            if (link.Url.StartsWith("c:"))
-            {
-                IsCitation = true;
-                link.Url = link.Url.Substring(2);
-            }
-
-            if (renderer.EnableLatexForInline)
-            {
-                renderer.Write(IsCitation ? @"\cite[" : @"\ref");
-                renderer.WriteChildren(link);
-                //renderer.WriteEscapeUrl(link.GetDynamicUrl != null ? link.GetDynamicUrl() ?? link.Url : link.Url);
-                //renderer.Write("\"");
-                renderer.WriteAttributes(link);
-            }
-            if (link.IsImage)
-            {
-                if (renderer.EnableLatexForInline)
-                {
-                    renderer.Write(" alt=\"");
-                }
-                var wasEnableLatexForInline = renderer.EnableLatexForInline;
-                renderer.EnableLatexForInline = false;
-                renderer.WriteChildren(link);
-                renderer.EnableLatexForInline = wasEnableLatexForInline;
-                if (renderer.EnableLatexForInline)
-                {
-                    renderer.Write("\"");
-                }
-            }
-
-            if (renderer.EnableLatexForInline && !string.IsNullOrEmpty(link.Title))
-            {
-                renderer.Write(" title=\"");
-                renderer.WriteEscape(link.Title);
-                renderer.Write("\"");
-            }
 
             if (link.IsImage)
             {
-                if (renderer.EnableLatexForInline)
-                {
-                    renderer.Write(" />");
-                }
+                var descFrags = GetImgDesc(link).Split(':');
+                var linkFrags = link.Url.Split(':');
+
+                var id = descFrags[0];
+                var desc = descFrags.Length > 1 ? descFrags[1] : string.Empty;
+                var path = linkFrags[0];
+                var size = linkFrags.Length > 1 ? linkFrags[1] : "0.5";
+
+                renderer.Write("\\begin{figure}\n    \\centering\n    \\includegraphics[width=");
+                renderer.Write(size);
+                renderer.Write("\\textwidth]{");
+                renderer.Write(path);
+                renderer.Write("}\n    \\caption{\\label{");
+                renderer.Write(id);
+                renderer.Write("}");
+                renderer.Write(desc);
+                renderer.Write("}\n\\end{figure}");
             }
             else
             {
-                if (renderer.EnableLatexForInline)
+                bool isCitation = false;
+
+                if (link.Url.StartsWith("c:"))
                 {
-                    if (AutoRelNoFollow)
-                    {
-                        renderer.Write(" rel=\"nofollow\"");
-                    }
-                    renderer.Write(IsCitation ? "]{" : "{");
+                    isCitation = true;
+                    link.Url = link.Url.Substring(2);
                 }
-                
+
+                renderer.Write(isCitation ? @"\cite[" : @"\ref");
+                renderer.WriteChildren(link);
+                renderer.Write(isCitation ? "]{" : "{");
                 renderer.Write(link.Url);
-                if (renderer.EnableLatexForInline)
-                {
-                    renderer.Write("}");
-                }
-            }
+                renderer.Write("}");
+            }            
+        }
+
+        private string GetImgDesc(LinkInline link)
+        {
+            var writer = new StringWriter();
+            new LatexRenderer(writer).WriteChildren(link);
+            return writer.ToString();
         }
     }
 }

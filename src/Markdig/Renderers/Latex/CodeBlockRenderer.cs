@@ -33,39 +33,67 @@ namespace Markdig.Renderers.Latex
         protected override void Write(LatexRenderer renderer, CodeBlock obj)
         {
             renderer.EnsureLine();
-
             var fencedCodeBlock = obj as FencedCodeBlock;
-            if (fencedCodeBlock?.Info != null && BlocksAsDiv.Contains(fencedCodeBlock.Info))
-            {
-                var infoPrefix = (obj.Parser as FencedCodeBlockParser)?.InfoPrefix ??
-                                 FencedCodeBlockParser.DefaultInfoPrefix;
 
-                // We are replacing the HTML attribute `language-mylang` by `mylang` only for a div block
-                // NOTE that we are allocating a closure here
-                renderer.Write("<div")
-                    .WriteAttributes(obj.TryGetAttributes(),
-                        cls => cls.StartsWith(infoPrefix) ? cls.Substring(infoPrefix.Length) : cls)
-                    .Write(">");
+            if(fencedCodeBlock != null)
+            {
+                var info = fencedCodeBlock.Info ?? string.Empty;
+                var langFrag = info.Split(':');
+
+                var language = langFrag[0];
+                var label = langFrag.Length > 0 ? langFrag[1] : null;
+                var caption = langFrag.Length > 1 ? langFrag[2] : null;
+
+                renderer.Write("\\begin{lstlisting}[language=");
+                renderer.Write(language);
+                if(label != null)
+                {
+                    renderer.Write(",label=");
+                    renderer.Write(label);
+                }
+                if(caption != null)
+                {
+                    renderer.Write(",caption=");
+                    renderer.Write(caption);
+                }
+                renderer.Write("]\n");
+
                 renderer.WriteLeafRawLines(obj, true, true, true);
-                renderer.WriteLine("</div>");
 
+                renderer.Write("\\end{lstlisting}");
             }
-            else
-            {
-                renderer.Write("<pre");
-                if (OutputAttributesOnPre)
-                {
-                    renderer.WriteAttributes(obj);
-                }
-                renderer.Write("><code");
-                if (!OutputAttributesOnPre)
-                {
-                    renderer.WriteAttributes(obj);
-                }
-                renderer.Write(">");
-                renderer.WriteLeafRawLines(obj, true, true);
-                renderer.WriteLine("</code></pre>");
-            }
+
+            //if (fencedCodeBlock?.Info != null && BlocksAsDiv.Contains(fencedCodeBlock.Info))
+            //{
+            //    var infoPrefix = (obj.Parser as FencedCodeBlockParser)?.InfoPrefix ??
+            //                     FencedCodeBlockParser.DefaultInfoPrefix;
+
+            //    // We are replacing the HTML attribute `language-mylang` by `mylang` only for a div block
+            //    // NOTE that we are allocating a closure here
+            //    renderer.Write("<div")
+            //        .WriteAttributes(obj.TryGetAttributes(),
+            //            cls => cls.StartsWith(infoPrefix) ? cls.Substring(infoPrefix.Length) : cls)
+            //        .Write(">");
+            //    renderer.WriteLeafRawLines(obj, true, true, true);
+            //    renderer.WriteLine("</div>");
+
+            //}
+            //else
+            //{
+            //    renderer.Write("<pre");
+            //    if (OutputAttributesOnPre)
+            //    {
+            //        renderer.WriteAttributes(obj);
+            //    }
+            //    renderer.Write("><code");
+            //    if (!OutputAttributesOnPre)
+            //    {
+            //        renderer.WriteAttributes(obj);
+            //    }
+            //    renderer.Write(">");
+            //    renderer.WriteLeafRawLines(obj, true, true);
+            //    renderer.WriteLine("</code></pre>");
+            //}
         }
     }
 }

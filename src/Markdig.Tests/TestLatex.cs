@@ -90,8 +90,15 @@ namespace Markdig.Tests
         [Test]
         public void TestImage()
         {
-            var latex = Markdown.ToLatex(@"![id:My Caption](0.5:my/path.png)");
+            var latex = Markdown.ToLatex(@"![id:My Caption](my/path.png:0.5)");
             Assert.AreEqual(latex, "\\begin{figure}\n    \\centering\n    \\includegraphics[width=0.5\\textwidth]{my/path.png}\n    \\caption{\\label{id}My Caption}\n\\end{figure}");
+        }
+
+        [Test]
+        public void TestCode()
+        {
+            var latex = Markdown.ToLatex("```csharp:mylabel:mycapt\ncode\n```");
+            Assert.AreEqual(latex, "\\begin{lstlisting}[language=csharp,label=mylabel,caption=mycapt]\ncode\n\\end{lstlisting}");
         }
 
     }
