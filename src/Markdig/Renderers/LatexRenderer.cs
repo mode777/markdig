@@ -128,44 +128,90 @@ namespace Markdig.Renderers
             {
                 switch (content[offset])
                 {
-                    case '<':
-                        Write(content, previousOffset, offset - previousOffset);
-                        if (EnableLatexEscape)
-                        {
-                            Write("&lt;");
-                        }
-                        previousOffset = offset + 1;
-                        break;
-                    case '>':
-                        if (!softEscape)
-                        {
-                            Write(content, previousOffset, offset - previousOffset);
-                            if (EnableLatexEscape)
-                            {
-                                Write("&gt;");
-                            }
-                            previousOffset = offset + 1;
-                        }
-                        break;
                     case '&':
                         Write(content, previousOffset, offset - previousOffset);
                         if (EnableLatexEscape)
                         {
-                            Write("&amp;");
+                            Write("\\&");
                         }
                         previousOffset = offset + 1;
                         break;
-                    case '"':
+                    case '%':                        
+                        Write(content, previousOffset, offset - previousOffset);
+                        if (EnableLatexEscape)
+                        {
+                            Write("\\%");
+                        }
+                        previousOffset = offset + 1;                        
+                        break;
+                    case '$':
+                        Write(content, previousOffset, offset - previousOffset);
+                        if (EnableLatexEscape)
+                        {
+                            Write("\\$");
+                        }
+                        previousOffset = offset + 1;
+                        break;
+                    case '#':
                         if (!softEscape)
                         {
                             Write(content, previousOffset, offset - previousOffset);
                             if (EnableLatexEscape)
                             {
-                                Write("&quot;");
+                                Write("\\#");
                             }
                             previousOffset = offset + 1;
                         }
                         break;
+                    case '_':
+                        Write(content, previousOffset, offset - previousOffset);
+                        if (EnableLatexEscape)
+                        {
+                            Write("\\_");
+                        }
+                        previousOffset = offset + 1;
+                        break;
+                    case '{':
+                        Write(content, previousOffset, offset - previousOffset);
+                        if (EnableLatexEscape)
+                        {
+                            Write("\\{");
+                        }
+                        previousOffset = offset + 1;
+                        break;
+                    case '}':
+                        Write(content, previousOffset, offset - previousOffset);
+                        if (EnableLatexEscape)
+                        {
+                            Write("\\}");
+                        }
+                        previousOffset = offset + 1;
+                        break;
+                    case '~':
+                        Write(content, previousOffset, offset - previousOffset);
+                        if (EnableLatexEscape)
+                        {
+                            Write("\\textasciitilde");
+                        }
+                        previousOffset = offset + 1;
+                        break;
+                    case '^':
+                        Write(content, previousOffset, offset - previousOffset);
+                        if (EnableLatexEscape)
+                        {
+                            Write("\\textasciicircum");
+                        }
+                        previousOffset = offset + 1;
+                        break;
+                    case '\\':
+                        Write(content, previousOffset, offset - previousOffset);
+                        if (EnableLatexEscape)
+                        {
+                            Write("\\textbackslash");
+                        }
+                        previousOffset = offset + 1;
+                        break;
+
                 }
             }
 
@@ -178,63 +224,63 @@ namespace Markdig.Renderers
         /// </summary>
         /// <param name="content">The content.</param>
         /// <returns>This instance</returns>
-        public LatexRenderer WriteEscapeUrl(string content)
-        {
-            if (content == null)
-                return this;
+        //public LatexRenderer WriteEscapeUrl(string content)
+        //{
+        //    if (content == null)
+        //        return this;
 
-            int previousPosition = 0;
-            int length = content.Length;
+        //    int previousPosition = 0;
+        //    int length = content.Length;
 
-            for (var i = 0; i < length; i++)
-            {
-                var c = content[i];
+        //    for (var i = 0; i < length; i++)
+        //    {
+        //        var c = content[i];
 
-                if (c < 128)
-                {
-                    var escape = HtmlHelper.EscapeUrlCharacter(c);
-                    if (escape != null)
-                    {
-                        Write(content, previousPosition, i - previousPosition);
-                        previousPosition = i + 1;
-                        Write(escape);
-                    }
-                }
-                else
-                {
-                    Write(content, previousPosition, i - previousPosition);
-                    previousPosition = i + 1;
+        //        if (c < 128)
+        //        {
+        //            var escape = HtmlHelper.EscapeUrlCharacter(c);
+        //            if (escape != null)
+        //            {
+        //                Write(content, previousPosition, i - previousPosition);
+        //                previousPosition = i + 1;
+        //                Write(escape);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Write(content, previousPosition, i - previousPosition);
+        //            previousPosition = i + 1;
 
-                    // Special case for Edge/IE workaround for MarkdownEditor, don't escape non-ASCII chars to make image links working
-                    if (UseNonAsciiNoEscape)
-                    {
-                        Write(c);
-                    }
-                    else
-                    {
-                        byte[] bytes;
-                        if (c >= '\ud800' && c <= '\udfff' && previousPosition < length)
-                        {
-                            bytes = Encoding.UTF8.GetBytes(new[] { c, content[previousPosition] });
-                            // Skip next char as it is decoded above
-                            i++;
-                            previousPosition = i + 1;
-                        }
-                        else
-                        {
-                            bytes = Encoding.UTF8.GetBytes(new[] { c });
-                        }
-                        for (var j = 0; j < bytes.Length; j++)
-                        {
-                            Write($"%{bytes[j]:X2}");
-                        }
-                    }
-                }
-            }
+        //            // Special case for Edge/IE workaround for MarkdownEditor, don't escape non-ASCII chars to make image links working
+        //            if (UseNonAsciiNoEscape)
+        //            {
+        //                Write(c);
+        //            }
+        //            else
+        //            {
+        //                byte[] bytes;
+        //                if (c >= '\ud800' && c <= '\udfff' && previousPosition < length)
+        //                {
+        //                    bytes = Encoding.UTF8.GetBytes(new[] { c, content[previousPosition] });
+        //                    // Skip next char as it is decoded above
+        //                    i++;
+        //                    previousPosition = i + 1;
+        //                }
+        //                else
+        //                {
+        //                    bytes = Encoding.UTF8.GetBytes(new[] { c });
+        //                }
+        //                for (var j = 0; j < bytes.Length; j++)
+        //                {
+        //                    Write($"%{bytes[j]:X2}");
+        //                }
+        //            }
+        //        }
+        //    }
 
-            Write(content, previousPosition, length - previousPosition);
-            return this;
-        }
+        //    Write(content, previousPosition, length - previousPosition);
+        //    return this;
+        //}
 
         /// <summary>
         /// Writes the attached <see cref="LatexAttributes"/> on the specified <see cref="MarkdownObject"/>.

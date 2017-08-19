@@ -25,7 +25,7 @@ namespace Markdig.Renderers.Latex.Inlines
                 {
                     renderer.Write("mailto:");
                 }
-                renderer.WriteEscapeUrl(obj.Url);
+                renderer.Write(obj.Url);
                 renderer.WriteAttributes(obj);
 
                 if (!obj.IsEmail && AutoRelNoFollow)

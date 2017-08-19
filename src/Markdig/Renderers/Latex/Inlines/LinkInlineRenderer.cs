@@ -52,7 +52,10 @@ namespace Markdig.Renderers.Latex.Inlines
                 }
 
                 renderer.Write(isCitation ? @"\cite[" : @"\ref");
-                renderer.WriteChildren(link);
+                if (isCitation)
+                {
+                    renderer.WriteChildren(link);
+                }
                 renderer.Write(isCitation ? "]{" : "{");
                 renderer.Write(link.Url);
                 renderer.Write("}");

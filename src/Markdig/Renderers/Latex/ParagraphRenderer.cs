@@ -24,6 +24,7 @@ namespace Markdig.Renderers.Latex
             renderer.WriteLeafInline(obj);
             if (!renderer.ImplicitParagraph)
             {
+                renderer.Write("\n");
                 //renderer.WriteLine("</p>");
             }
         }

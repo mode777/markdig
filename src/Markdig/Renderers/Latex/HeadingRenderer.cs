@@ -26,7 +26,7 @@ namespace Markdig.Renderers.Latex
                 ? HeadingTexts[obj.Level - 1]
                 : obj.Level.ToString(CultureInfo.InvariantCulture);
 
-            renderer.Write(@"\").Write(headingText)/*.WriteAttributes(obj)*/.Write("{");
+            renderer.Write("\n\\").Write(headingText)/*.WriteAttributes(obj)*/.Write("{");
             renderer.WriteLeafInline(obj);
             renderer.Write("}\n")/*.Write(headingText).WriteLine(">")*/;
         }

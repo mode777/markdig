@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{061866E2-005C-4D13-A338-EA464BBEC60F}"
 	ProjectSection(SolutionItems) = preProject
@@ -24,6 +24,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Markdig.WebApp", "Markdig.WebApp\Markdig.WebApp.csproj", "{3CAD9801-9976-46BE-BACA-F6D0D21FDC00}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnicodeNormDApp", "UnicodeNormDApp\UnicodeNormDApp.csproj", "{33FFC0B9-0187-44F9-9424-BB5AF5B4FB84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "md2tex", "md2tex\md2tex.csproj", "{05566A08-8DA4-406F-BE6F-A14952D52DCE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{33FFC0B9-0187-44F9-9424-BB5AF5B4FB84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33FFC0B9-0187-44F9-9424-BB5AF5B4FB84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33FFC0B9-0187-44F9-9424-BB5AF5B4FB84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05566A08-8DA4-406F-BE6F-A14952D52DCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05566A08-8DA4-406F-BE6F-A14952D52DCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05566A08-8DA4-406F-BE6F-A14952D52DCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05566A08-8DA4-406F-BE6F-A14952D52DCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

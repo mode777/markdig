@@ -41,19 +41,31 @@ namespace Markdig.Renderers.Latex
                 var langFrag = info.Split(':');
 
                 var language = langFrag[0];
-                var label = langFrag.Length > 0 ? langFrag[1] : null;
-                var caption = langFrag.Length > 1 ? langFrag[2] : null;
+                var label = langFrag.Length > 1 ? langFrag[1] : null;
+                var caption = langFrag.Length > 2 ? langFrag[2] : null;
 
-                renderer.Write("\\begin{lstlisting}[language=");
-                renderer.Write(language);
+                var hasOptions = false;
+
+                renderer.Write("\\begin{lstlisting}[");
+                if (!String.IsNullOrEmpty(language))
+                {
+                    renderer.Write("language=");
+                    renderer.Write(language);
+                    hasOptions = true;
+                }
                 if(label != null)
                 {
-                    renderer.Write(",label=");
+                    if (hasOptions)
+                        renderer.Write(",");
+                    renderer.Write("label=");
                     renderer.Write(label);
+                    hasOptions = true;
                 }
                 if(caption != null)
                 {
-                    renderer.Write(",caption=");
+                    if (hasOptions)
+                        renderer.Write(",");
+                    renderer.Write("caption=");
                     renderer.Write(caption);
                 }
                 renderer.Write("]\n");
