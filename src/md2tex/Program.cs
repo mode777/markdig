@@ -21,7 +21,12 @@ namespace md2tex
                 try
                 {
                     var markdown = File.ReadAllText(x.FullName);
-                    var latex = Markdown.ToLatex(markdown);
+
+                    // strip comments
+                    var latex = Markdown.ToLatex(markdown)
+                        .Replace("<!--", string.Empty)
+                        .Replace("-->", string.Empty);
+
                     var targetFile = Path.Combine(x.Directory.FullName, Path.GetFileNameWithoutExtension(x.FullName)) + ".tex";
                     File.WriteAllText(targetFile, latex);
                     Console.WriteLine($"Generated {targetFile}");
